@@ -1,0 +1,15 @@
+<div class="ui menu top fixed  item inverted ">
+  <a class="item" >
+    <h3>{{funkTitle}}</h3>
+  </a>
+</div>
+
+<div *ngFor="let funktion of menuDataService.menu_f | filterObject: 'ba_id' : funkId " >
+  <div class="ui menu item">
+    <!-- <a sm-item [routerLink]="['#/page',{id:funktion.f_url}]" > -->
+    <a class="item" [routerLink]="['/page/',funktion.f_url]" >
+      <h2 > {{funktion.f}}  </h2>
+    </a>
+  </div>
+</div>
+

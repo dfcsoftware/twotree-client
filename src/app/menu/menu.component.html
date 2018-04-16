@@ -1,0 +1,200 @@
+ <div class="ui three item menu bottom fixed inverted blue">
+   <a class="item" (click)="invertedSidebarLeft.toggle()">
+     <i class="sidebar big icon"></i>
+   </a>
+   <a class="item" href="/twotree/home"> <!-- [routerLink]="['/home']" > -->
+     <i class="home big icon green" *ngIf="(isConnected | async)" ></i>
+     <i class="home big icon red" *ngIf="!(isConnected | async)" ></i>
+   </a>
+   <a class="item" (click)="invertedSidebarRight.toggle()">
+     <i class="help circle big icon"></i>
+   </a>
+ </div>
+
+ <sui-sidebar class="left vertical inverted labeled icon menu" #invertedSidebarLeft>
+   <div class="item"><h3>&nbsp;</h3></div>
+   <div>
+   </div>
+   <div *ngFor="let ba of menuDataService.menu_ba" (click)="invertedSidebarLeft.toggle()">
+     <a class="item" [routerLink]="[ba.ba_url]">
+       <h3>{{ba.ba}}</h3>
+     </a>
+   </div>
+ </sui-sidebar>
+
+ <sui-sidebar class="ui right vertical inverted sidebar labeled icon menu"  #invertedSidebarRight>
+<div class="item"></div>
+<div class="item">
+ <div class="item heading"  >Header</div>
+<pre class="item" >
+==h2==&para;
+===h3===&para;
+</pre>
+ <div class="item heading">Paragraphs</div>
+<pre>
+separated by an empty line.
+</pre>
+ <div class="list-group-item list-group-item-heading">line break</div>
+<pre>
+line\\&para; break.
+</pre>
+ <div class="item heading">blockquote</div>
+<pre>
+["quote"]
+[(cite)"quote"]
+[(cite,title)"quote"]
+</pre>
+ <div class="item heading">preformatted block</div>
+<pre>
+[%code block%]
+[(lang)%code block%]
+</pre>
+ <div class="list-group-item list-group-item-heading">inline formatting</div>
+<pre>
+*strong*
+_emphasize_
+^superscript^
+~subscript~
+%code%
+(-deleted-)
+?abbr(Abbreviation)?
+</pre>
+ <div class="list-group-item list-group-item-heading">links</div>
+<pre>
+http://u.ri
+[http://u.ri, title]
+</pre>
+ <div class="list-group-item list-group-item-heading">images <i>(png, gif, jpg)</i></div>
+<pre>
+uri/image.png
+[img:uri/image.png,title]
+</pre>
+ <div class="list-group-item list-group-item-heading">definition list</div>
+<pre>
+; term: definition
+</pre>
+ <div class="list-group-item list-group-item-heading">lists</div>
+<pre>
+* unordered
+* list
+
+1. ordered
+1. list
+
+1. multi-level
+1* mixed
+1*a. list
+</pre>
+ <div class="list-group-item list-group-item-heading">tables</div>
+<pre>
+[| *head* |2>columns|
+ | center |left | right|]
+</pre>
+ <div class="list-group-item list-group-item-heading">shortcuts</div>
+<pre>
+--   &ndash;
+---  &mdash;
+...  &hellip;
+<-   &larr;
+->   &rarr;
+<->  &larr;&rarr;
+</pre>
+
+ <div class="list-group-item list-group-item-heading">Styles</div>
+<pre>
+&#123;style}paragraph
+[&#123;style}(cite, title)"quote"]
+[&#123;style}(lang)%code block%]
+[&#123;style}img:uri/image.png]
+[&#123;style}|table|]
+</pre>
+ <div class="list-group-item list-group-item-heading">Style Properties</div>
+<pre>
+&#123;p1;p2;...;pN} or
+&#123;p1,p2,...,pN}
+>  ? left-indent
+<  ? right-indent
+>> ? right-align
+<< ? left-align
+=  ? center-align
+_  ? underline
+b  ? border
+c:col ? color
+C:col ? background-color
+w:width ? width
+
+any CSS property
+is allowed.
+</pre>
+ <div class="list-group-item list-group-item-heading">Style Examples</div>
+
+<pre>
+&#123;>;c:red;C:#aef}
+&#123;>>,w:40\%,b}
+&#123;_,padding:1em}
+</pre>
+
+</div>
+
+ <div class="item heading">
+  Markup similar to LaTex
+ </div>
+<table style="background-color: #ffffff; ">
+<tr><td colspan="2" style="text-align:left;"><h5>Block Formula</h5> </td></tr>
+<tr><td style="text-align:left;"><code>[$y = f(x)$]</code> </td><td style="text-align:left;"><dfn>y  =  f(x)</dfn> </td></tr>
+<tr><td style="text-align:left;"><code>[(num)$y = e^x$]</code> </td><td style="text-align:left;"><dfn>y  =  f(x)   (num)</dfn> </td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Inline Formula</h5> </td></tr>
+<tr><td style="text-align:left;"><code>With $y = f(x)$ do</code> </td><td style="text-align:right;"> With <dfn>y  = f(x)</dfn> do</td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Overindex, Underindex</h5> </td></tr>
+<tr><td style="text-align:left;"><code>a^2, x_&#123;n-1}, a_&#123;i+1}^&#123;m+n}</code> </td><td style="text-align:right;"> <dfn>a<sup class="i">2</sup>, x<sub class="i"><!--&#123;-->n&#8722;1<!--}--></sub>, a<span class="s"><span class="i"><!--&#123;-->m+n<!--}--></span><span class="i"><!--&#123;-->i+1<!--}--></span></span></dfn></td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Overscript, Underscript</h5> </td></tr>
+<tr><td style="text-align:left;"><b>\prod^n, \int_&#123;\phi=0}^2\pi, \sum_&#123;i=1}^&#123;n-1}</b> </td><td style="text-align:right;"> <dfn><span class="o"><span class="x">n</span><span class="h">&#8719;</span><span>&nbsp;</span></span>, <span class="o"><span class="x">2&#960;</span><span class="h">&#8747;</span><span class="x"><!--&#123;-->&#966;=0<!--}--></span></span>, <span class="o"><span class="x"><!--&#123;-->n&#8722;1<!--}--></span><span class="h">&#8721;</span><span class="x"><!--&#123;-->i=1<!--}--></span></span></dfn></td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Fractions</h5> </td></tr>
+<tr><td style="text-align:left;"><code>a/b, &#123;a+b}/&#123;c+d}, a//b, a//&#123;b+c}</code> </td><td style="text-align:right;"> <dfn><span class="f"><span class="n">a</span><span class="d">b</span></span>, <span class="f"><span class="n"><!--&#123;-->a+b<!--}--></span><span class="d"><!--&#123;-->c+d<!--}--></span></span>, <sup>a</sup>&#8260;<sub>b</sub>, <sup>a</sup>&#8260;<sub><!--&#123;-->b+c<!--}--></sub></dfn></td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Vectors</h5> </td></tr>
+<tr><td style="text-align:left;"><code>!v = [x,y,z]</code> </td><td style="text-align:right;"> <dfn><span class="b">v</span> = <span class="lb" style="font-size:300%;">&nbsp;</span><span class="v"><span class="e">x</span><span class="e">y</span><span class="e">z</span></span><span class="rb" style="font-size:300%;">&nbsp;</span></dfn></td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Matrices</h5> </td></tr>
+<tr><td style="text-align:left;"><code>!A = [[a,b,c][d,e,f]]</code> </td><td style="text-align:right;"> <dfn><span class="b">A</span> = <span class="lb" style="font-size:200%;">&nbsp;</span><span class="m"><span class="e">a</span><span class="e">d</span></span>
+<span class="m"><span class="e">b</span><span class="e">e</span></span>
+<span class="m"><span class="e">c</span><span class="e">f</span></span><span class="rb" style="font-size:200%;">&nbsp;</span></dfn></td></tr>
+<!-- <tr><td colspan="2" style="text-align:left;"><h5>Spaces</h5> </td></tr>
+<tr><td style="text-align:left;"><code> (&nbsp;)(&nbsp;&nbsp;)(&nbsp;&nbsp;&nbsp;)(&nbsp;&nbsp;&nbsp;&nbsp;)</code> </td><td style="text-align:right;"> <dfn>( )(  )( )( )</dfn></td></tr> --><!-- due to ie6 charset support -->
+<tr><td colspan="2" style="text-align:left;"><h5>Symbols</h5> </td></tr>
+<tr><td style="text-align:left;"><code>= -= !=</code> </td><td style="text-align:right;"> <dfn>= &#8801; &#8800;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>~= ~~ ~</code> </td><td style="text-align:right;"> <dfn>&#8773; &#8776; &#8764;</dfn></td></tr>
+<tr><td><code>&gt; &lt; &gt;= &lt;=</code></td><td style="text-align:right;"> <dfn>&gt; &lt; &#8805; &#8804;</dfn></td></tr>
+<tr><td><code> * \x +- </code></td><td style="text-align:right;"> <dfn> &#183; &#215; &#177; </dfn></td></tr>
+<tr><td><code>&lt;- -&gt; &lt;-&gt;</code></td><td style="text-align:right;"> <dfn>&#8592; &#8594; &#8596;</dfn></td></tr>
+<tr><td><code>=&gt; &lt;=&gt; /O /o </code></td><td style="text-align:right;"> <dfn>&#8658; &#8660; &#216; &#248;</dfn></td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Miscellaneous Symbols</h5> </td></tr>
+<tr><td style="text-align:left;"><code>\thetasym \upsih \piv</code> </td><td style="text-align:right;"> <dfn>&#977; &#978; &#982;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\larr \uarr \rarr \darr</code> </td><td style="text-align:right;"> <dfn>&#8592; &#8593; &#8594; &#8595; </dfn></td></tr>
+<tr><td style="text-align:left;"><code>\harr \crarr \lArr</code> </td><td style="text-align:right;"> <dfn>&#8596; &#8629; &#8656;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\uArr \rArr \dArr</code> </td><td style="text-align:right;"> <dfn>&#8657; &#8658; &#8659;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\part \exist \hArr \forall</code> </td><td style="text-align:right;"> <dfn>&#8706; &#8707; &#8660; &#8704; </dfn></td></tr>
+<tr><td style="text-align:left;"><code>\empty \nabla \isin</code> </td><td style="text-align:right;"> <dfn>&#8709; &#8711; &#8712; </dfn></td></tr>
+<tr><td style="text-align:left;"><code>\notin \ni \prod</code> </td><td style="text-align:right;"> <dfn>&#8713; &#8715; <span class="h">&#8719;</span></dfn></td></tr>
+<tr><td style="text-align:left;"><code>\lowast \radic \sum \minus</code> </td><td style="text-align:right;"> <dfn>&#8727; &#8730; <span class="h">&#8721;</span> &#8722;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\prop \infin \ang</code> </td><td style="text-align:right;"> <dfn> &#8733; &#8734; &#8736; </dfn></td></tr>
+<tr><td style="text-align:left;"><code>\and \or \cap \cup</code> </td><td style="text-align:right;"> <dfn>&#8743; &#8744; &#8745; &#8746;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\int \there4 \sim \cong</code> </td><td style="text-align:right;"> <dfn><span class="h">&#8747;</span> &#8756; &#8764; &#8773;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\asymp \ne \equiv</code> </td><td style="text-align:right;"> <dfn>&#8776; &#8800; &#8801; </dfn></td></tr>
+<tr><td style="text-align:left;"><code>\le \ge \sub</code> </td><td style="text-align:right;"> <dfn>&#8804; &#8805; &#8834;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\sup \nsub \sube</code> </td><td style="text-align:right;"> <dfn>&#8835; &#8836; &#8834;e</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\supe \oplus \otimes</code> </td><td style="text-align:right;"> <dfn>&#8835;e &#8853; &#8855;</dfn></td></tr>
+<tr><td style="text-align:left;"><code>\perp \sdot</code> </td><td style="text-align:right;"> <dfn>&#8869; &#8901;</dfn></td></tr>
+<tr><td colspan="2" style="text-align:left;"><h5>Greek Letters</h5> </td></tr>
+<tr><td><code>\Alpha \Beta \Gamma \Delta \Epsilon</code></td><td style="text-align:right;"> <dfn>&#913; &#914; &#915; &#916; &#917;</dfn></td></tr>
+<tr><td><code>\Zeta \Eta \Theta \Iota \Kappa</code></td><td style="text-align:right;"> <dfn>&#918; &#919; &#920; &#921; &#922;</dfn></td></tr>
+<tr><td><code>\Lambda \Mu \Nu \Xi \Omicron</code></td><td style="text-align:right;"> <dfn>&#923; &#924; &#925; &#926; &#927;</dfn></td></tr>
+<tr><td><code>\Pi \Rho \Sigma \Tau \Upsilon</code></td><td style="text-align:right;"> <dfn>&#928; &#929; &#931; &#932; &#933;</dfn></td></tr>
+<tr><td><code>\Phi \Chi \Psi \Omega</code></td><td style="text-align:right;"> <dfn>&#934; &#935; &#936; &#937;</dfn></td></tr>
+<tr><td><code>\alpha \beta \gamma \delta \epsilon</code></td><td style="text-align:right;"> <dfn>&#945; &#946; &#947; &#948; &#949;</dfn></td></tr>
+<tr><td><code>\zeta \eta \theta \iota \kappa</code></td><td style="text-align:right;"> <dfn>&#950; &#951; &#952; &#953; &#954;</dfn></td></tr>
+<tr><td><code>\lambda \mu \nu \xi \omicron</code></td><td style="text-align:right;"> <dfn>&#955; &#956; &#957; &#958; &#959;</dfn></td></tr>
+<tr><td><code>\pi \rho \sigmaf \sigma \tau</code></td><td style="text-align:right;"> <dfn>&#960; &#961; &#962; &#963; &#964;</dfn></td></tr>
+<tr><td><code>\upsilon \phi \chi \psi \omega </code></td><td style="text-align:right;"> <dfn>&#965; &#966; &#967; &#968; &#969;</dfn></td><td>
+</td></tr></table>
+<div class="item"></div>
+<div class="item"></div>
+ </sui-sidebar>

@@ -1,0 +1,59 @@
+<div class="ui menu top fixed three inverted "> <!--  item  -->
+  <a class="item" (click)="goBack()" >
+      <i class="icon chevron left big"></i>
+  </a>
+  <a class="item">
+    <h3 class="truncate">{{pageDataService.pageTitle}}</h3>
+  </a>
+  <div class="right menu">
+    <a class="item" (click)="editMode()" *ngIf="authService.isLoggedIn()">
+      <i class="icon edit big"></i>.
+    </a>
+  </div>
+</div>
+<div class="ui segment">
+ <sui-tabset>
+    <div class="ui top attached tabular menu">
+        <a class="item" suiTabHeader="1">Items</a>
+        <a class="item" suiTabHeader="2" [isActive]="pageDataService.activeDetail">Details</a>
+        <a class="item" suiTabHeader="3" *ngIf="ifEdit">Recycle</a>
+    </div>
+  <div class="ui bottom attached segment" suiTabContent="1">
+
+    <ul class='ui menu' [dragula]='"item-bag"' [dragulaModel]='pageDataService.page_items'>
+      <li *ngFor="let pi of pageDataService.page_items; let idx = index;">
+       <div class="ui item" id="{{idx}}">
+           <div class="four large ui buttons" id="{{pi.id}}">
+            <button class="ui basic button" *ngIf="ifEdit"><i class="icon trash alternate big"></i></button>
+            <button class="ui basic button largetext" (click)="showPage(pi.id)">{{pi.nm}}</button>
+            <button class="ui basic button" *ngIf="ifEdit"><i class="icon edit big"></i></button>
+            <button class="ui basic button" *ngIf="ifEdit"><i class="icon hand rock outline big movehandle"></i></button>
+           </div>
+       </div>
+      </li>
+    </ul>
+
+  </div>
+  <div class="ui bottom attached segment" suiTabContent="2" >
+     <app-detail [page_html]="pageDataService.page_html" [pageTitle]="pageDataService.pageTitle" ></app-detail>
+  </div>
+  <div class="ui bottom attached segment" suiTabContent="3" *ngIf="ifEdit">
+     Hiding in plain sight...edit mode is on!!
+      <div class='ui menu' > <!-- [dragula]='"item-bag"'  -->
+        <div class='ui menu' >You can move these elements between these two containers
+          <i class="icon align justify movehandle"></i></div>
+        <div class='ui menu' >Moving them anywhere else isn't quite possible
+          <i class="icon align justify movehandle"></i></div>
+        <div class='ui menu' >There's also the possibility of moving elements around in the same container, changing their position
+          <i class="icon align justify movehandle"></i></div>
+      </div>
+      <div class='ui menu item'>
+        <div>This is the default use case. You only need to specify the containers you want to use</div>
+        <div>More interactive use cases lie ahead</div>
+        <div>Make sure to check out the <a href='https://github.com/bevacqua/dragula#readme'>documentation on GitHub!</a></div>
+      </div>
+  </div>
+ </sui-tabset>
+</div>
+
+

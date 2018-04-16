@@ -1,0 +1,5 @@
+<div *ngFor="let d of page_html"> <!-- _detail"> -->
+  <div class="ui item"><h3>{{d.title}}</h3></div>
+  <div class="ui wiki detail" [innerHTML]="d.text | safeHtml"></div>
+  <hr>
+</div>

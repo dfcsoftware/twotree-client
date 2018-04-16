@@ -1,0 +1,99 @@
+<div class="ui center aligned segment">
+  <div *ngIf="!authService.getUser()">
+    <h2> Welcome back my friend, </h2>
+    <h3>  to the show that never ends. </h3>
+    <p>Please sign in to the system. </p>
+  </div>
+  <div class="ui error message" role="alert" *ngIf="msgBad">
+    {{ msgBad }}
+  </div>
+    <div class="ui positive message" role="alert" *ngIf="msgGood">
+    {{ msgGood }}
+  </div>
+</div>
+<form class="ui form"
+      [formGroup]="loginForm"
+      *ngIf="!authService.getUser()"
+      [class.error]="!loginForm.valid && loginForm.touched">
+
+  <div class="required field">
+    <label for="username">User:</label>
+    <input  class="form-control" type="text" placeholder="User Name"
+       [formControl]="loginForm.controls['username']"
+       [(ngModel)]="username">
+    <div *ngIf="loginForm.controls['username'].hasError('required')&&
+                loginForm.controls['username'].touched"
+      class="ui error message">
+      Username is required
+    </div>
+    <div *ngIf="loginForm.controls['username'].hasError('minlength')&&
+                loginForm.controls['username'].touched"
+      class="ui error message">
+      Username must be more characters
+    </div>
+  </div>
+
+  <div class="required field">
+    <label for="password">Password:</label>
+    <input class="form-control" type="password" placeholder="password"
+      [formControl]="loginForm.controls['password']"
+       [(ngModel)]="password">
+    <div *ngIf="loginForm.controls['password'].hasError('required') &&
+                loginForm.controls['password'].touched"
+      class="ui error message">
+      Password is required
+    </div>
+    <div *ngIf="loginForm.controls['password'].hasError('minlength')&&
+                loginForm.controls['password'].touched"
+      class="ui error message">
+      Password must be more characters
+    </div>
+  </div>
+
+  <button class="ui primary button" type="submit"
+    *ngIf="loginForm.valid"
+    (click)="login()">
+    Submit
+  </button>
+
+</form>
+
+  <div class="ui center aligned segment" *ngIf="authService.getUser()">
+    Logged in as <b>{{ authService.getUser() }}</b>
+    <div>
+     <button class="ui primary button" href (click)="logout()">Log out</button>
+    </div>
+    <hr style="background:lightgrey; border:0; height:7px" />
+    <div class="ui form">
+      <div class="grouped fields">
+        <label>Save pages offline?</label>
+        <div class="field">
+            <sui-checkbox class="ui toggle"
+             [(ngModel)]="dataService.localSettings.saveData"
+               (click)="putLocalSettings(dataService.localSettings)">
+              {{ dataService.localSettings.saveData }}
+            </sui-checkbox>
+        </div>
+        <hr style="background:lightgrey; border:0; height:7px" />
+        <div>Local storage is using {{localStorage}}MB</div>
+        <label>Remove current offline data?</label>
+        <div class="field">
+            <button class="ui negative button" href (click)="clearSettings()">
+             Delete
+            </button>
+        </div>
+        <ng-template let-context let-modal="modal" #modalTemplate>
+          <div class="header">Clear Twotree offline</div>
+            <div class="content">
+              <p>{{ context.data }}</p>
+            </div>
+          <div class="actions">
+            <button class="ui red button" (click)="modal.deny('denied')">Cancel</button>
+            <button class="ui green button" (click)="modal.approve('approved')" autofocus>Delete</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+

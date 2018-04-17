@@ -166,10 +166,10 @@ export class pageData {
                                 obj:"PAGE",
                                 auth:4}
                                 ],
-                          details:[{id:"SSC_CHANGES_1434111806843_ARTICLE",
-                                    title:"SSC Changes",
+                          details:[{id:"SC_CHANGES_1434111806843_ARTICLE",
+                                    title:"SC Changes",
                                     text:`Hi All,\n
-                                    After the changes done on 06/09, the frequent spikes in cluster waits were caused by dynamic remastering.\n
+                                    After the changes done, the frequent spikes in cluster waits were caused by dynamic remastering.\n
                                     \n
                                     Solution provided by _Oracle_ Support (SR 3-10878376361 : Cluster waits in the database):\n
                                     => This is bug which is fixed in 10.2.0.5.7 Patch Set Update. Bug 11674645 - \"gcs drm freeze in enter server mode\" waits in RAC ( Doc ID 11674645.8 )\n
@@ -234,18 +234,18 @@ End
                                     dat:"2015-03-25T20:24:00.000Z",
                                     obj:"PAGE",
                                     parent_auth_cd:4},
-                                   {id:"FD_INDEX_1426614762712_ARTICLE",
-                                    title:"FD Index",
+                                   {id:"F_INX_1426614762712_ARTICLE",
+                                    title:"F Index",
                                     text:`
 [%
-create index E3SUITE.I_EES_STRATEGY_BUFFER_IDX on E3SUITE.EES_STRATEGY_BUFFER("STRATEGY_ID","D_PARAM_VALUE")
- tablespace EES_E3_CONFIG online;
+create index APP.I_STRATEGY_IDX on APP.STRATEGY("STRATEGY_ID","PARAMETER")
+ tablespace APP_CONFIG online;
 %]
-Disable profile %SYS_SQLPROF_034eb040a93f8000% for delete on ees\\_strategy\\_buffer
+Disable profile %SYS_SQLPROF_033738dhf49d990% for delete on strategy
 [%
 BEGIN
   DBMS_SQLTUNE.alter_sql_profile (
-      name            => 'SYS_SQLPROF_034eb040a93f8000',
+      name            => 'SYS_SQLPROF_033738dhf49d990',
       attribute_name  => 'STATUS',
       value           => 'DISABLED');
 END;

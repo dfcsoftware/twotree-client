@@ -308,37 +308,6 @@ export class PageDataService {
       );
     } // putPage
 
-    putPageText(pagename:string,  page_type:string,        priv:boolean,
-                pageid:string, business_area_id:string, function_id:string,
-                callback:ICallback)  {
-      this.dataService.putPageText(pageid, pagename, priv, page_type,
-                                   business_area_id, function_id)
-        .subscribe(
-         (val) => {
-             console.log("PAGE-DATA: putPageText call successful value returned in body",
-                         val);
-             this.rslt = this.dataService.check_results(val);
-             if (this.rslt.status == Return.http_good ) {
-               console.log("PAGE-DATA: putPageText ok",this.rslt);
-               callback(null, this.rslt.payload);
-             } else { // Already tried local database
-               console.error("PAGE-DATA: http putPageText rslt no good", this.rslt.error);
-               //this.getLocalPage(parent_id);
-             }
-         },
-         response => {
-             console.error("PAGE-DATA: putPageText call in error", response);
-             this.rslt = this.dataService.check_error(response);
-             console.error('PAGE-DATA: ERROR putPageText-> status:',this.rslt.status);
-             console.error('PAGE-DATA: ERROR putPageText-> message:',this.rslt.error);
-             //this.getLocalPage(parent_id); // already tried it
-         },
-         () => {
-             //console.log("The POST observable is now completed.");
-        }
-      );
-    } // putPageText
-
   pageUP(index) {
     if (index <= 0 || index >= this.page_items.length)
             return;

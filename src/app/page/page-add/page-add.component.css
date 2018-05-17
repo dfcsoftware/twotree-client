@@ -1,0 +1,7 @@
+form input.ng-invalid, form input.ng-pristine.ng-invalid:focus {
+  border: 1px solid red;
+}
+
+form input.ng-pristine {
+    border: 1px solid dimgrey;
+}

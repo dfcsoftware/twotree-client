@@ -37,7 +37,7 @@ export class MenuDataService {
 
   // Simulate GET
   getBusinessAreasDemo() {
-    this.menu_ba = this.getMenuBusinessArea(this.businessArea.get_demo());
+    this.menu_ba = this.getMenuBusinessArea(this.businessArea.get_demo(),true);
     //console.log("MenuDataService: constructor");
     //console.log(this.menu_ba);;
   }
@@ -49,7 +49,7 @@ export class MenuDataService {
                    console.log("MENU-B: getMenuBusinessAreaLocal call successful value returned in body",
                     val);
                     if (val) {
-                      this.menu_ba = val;//this.getMenuBusinessArea(val);
+                      this.menu_ba = this.getMenuBusinessArea(val,false); //val; <- v6 change
                     }
                     this.getBusinessAreaHTTP(); // refresh local
                     },
@@ -72,7 +72,7 @@ export class MenuDataService {
              if (this.rslt.status == Return.http_good ) {
                console.log("MENU-B: ok",this.rslt);
                // Strip pound sign
-               this.menu_ba = this.getMenuBusinessArea(this.rslt.payload);
+               this.menu_ba = this.getMenuBusinessArea(this.rslt.payload,true);
                //console.log("MENU-B:",this.dataService.getLocalSettings());
                if (this.dataService.getLocalSettings().saveData) {
                  console.log("MENU-B: Saving BusinessArea locally");
@@ -107,14 +107,16 @@ export class MenuDataService {
   // This function strips the pound-sign '#' off the f_url JSON object
   //  TODO: once converted off the angular v1 version, the database can be updated
   //        to remove the pound sign, and this function eliminated.
-  getMenuBusinessArea(data : any ) {
+  getMenuBusinessArea(data : any, strip : boolean) {
      var ba = Array<BusinessArea>();
      var inx : any;
      //console.log("get_menu_business_area");
      //console.log(data);
      //if (data.status = Return.http_good) {
        for (inx in data ) {
-         data[inx].ba_url = data[inx].ba_url.substring(2,data[inx].ba_url.length);
+         if (strip) {
+           data[inx].ba_url = data[inx].ba_url.substring(2,data[inx].ba_url.length);
+         }
          ba.push(new BusinessArea(data[inx]));
        }
        return ba;
@@ -124,7 +126,7 @@ export class MenuDataService {
 
     // Simulate GET
   getFunktionsDemo() {
-    this.menu_f = this.getMenuFunktion(this.funktion.get_demo());
+    this.menu_f = this.getMenuFunktion(this.funktion.get_demo(),true);
     //console.log("MenuDataService: constructor");
     //console.log(this.menu_f);;
   } // getFunktionsDemo
@@ -136,7 +138,7 @@ export class MenuDataService {
                console.log("MENU-F: getMenuFunktionLocal call successful value returned in body",
                 val);
                if (val) {
-                 this.menu_f = val; //this.getMenuFunktion(val);
+                 this.menu_f = this.getMenuFunktion(val,false); // val <- v6 change (#)
                }
                this.getFunktionHTTP(); // refresh local
                  },
@@ -158,7 +160,7 @@ export class MenuDataService {
              this.rslt = this.dataService.check_results(val);
              if (this.rslt.status == Return.http_good ) {
                console.log("MENU-F: ok",this.rslt);
-               this.menu_f = this.getMenuFunktion(this.rslt.payload);
+               this.menu_f = this.getMenuFunktion(this.rslt.payload,true);
                if (this.dataService.getLocalSettings().saveData) {
                  console.log("MENU-F: Saving Funktion locally");
                  this.dataService.putMenuFunktionLocal(this.menu_f);
@@ -191,12 +193,14 @@ export class MenuDataService {
   // This function strips the pound-sign '#' off the f_url JSON object
   //  TODO: once converted off the angular v1 version, the database can be updated
   //        to remove the pound sign, and this function eliminated.
-  getMenuFunktion(data : any ) {
+  getMenuFunktion(data : any, strip : boolean) {
      var f = Array<Funktion>();
      var inx : any;
      //console.log(data);
      for (inx in data) {
-       data[inx].f_url = data[inx].f_url.substring(7,data[inx].f_url.length);
+       if (strip) {
+         data[inx].f_url = data[inx].f_url.substring(7,data[inx].f_url.length);
+       }
        f.push(new Funktion(data[inx]));
      }
      return f;

@@ -1,0 +1,78 @@
+<div class="ui menu top fixed three inverted "> <!--  item  -->
+  <a class="item" [routerLink]="['/page/',pageURL]" >
+      <i class="icon chevron left big"></i>
+  </a>
+  <a class="item">
+    <h3 class="truncate">Edit Page {{pageTitle}}</h3>
+  </a>
+  <div class="right menu">
+    <a class="item" (click)="savePage()"
+      *ngIf="authService.isLoggedIn()&&
+              pageFormGroup.valid&&
+              pageFormGroup.dirty">
+      <i class="icon save big"></i>.
+    </a>
+  </div>
+</div>
+<div class="ui segment">
+    <form class="ui form" [formGroup]="pageFormGroup">
+      <div class="required field">
+        <label for="itemTitle">New Item Title:</label>
+        <input type="text" placeholder="New Item Name" maxlength="60" autofocus required
+         formControlName="title"
+         id="itemTitle"
+         class="form-control"
+         [(ngModel)]="itemName">
+      </div>
+      <sui-message class="warning" *ngIf="pageFormGroup.invalid &&
+                                          pageFormGroup.dirty" >
+        <div class="header">
+          Item Title requires at least 4 characters
+        </div>
+        <!-- <p>dismiss with the close icon in the top right</p> -->
+      </sui-message>
+      <div class="required field">
+        <label for="object">Item Type:</label>
+        <select
+          formControlName="obj"
+          id="object">
+          <option *ngFor="let obj of pageDataService.pageObject" [ngValue]="obj"
+            class="form-control">
+           {{ obj.name }}
+          </option>
+        </select>
+      </div>
+      <div class="field">
+         <label for="privItem">Private:</label>
+         <sui-checkbox class="ui toggle"
+             formControlName="priv"
+             id="privItem"
+             [(ngModel)]="privateItem">
+              {{ privateItem }}
+         </sui-checkbox>
+      </div>
+    </form>
+
+     <p>Form value: {{ pageFormGroup.value | json }} {{itemName}}</p>
+     <p>Form Status: {{ pageFormGroup.status }} </p>
+
+    <sui-message class="success" >
+        <div class="header">
+         {{itemName}} {{message}}
+        </div>
+        <!-- <p>dismiss with the close icon in the top right</p> -->
+     </sui-message>
+
+</div>
+
+
+
+
+
+
+
+<p>
+  page-edit works!
+</p>
+
+

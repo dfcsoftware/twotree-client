@@ -3,8 +3,8 @@
      <i class="sidebar big icon"></i>
    </a>
    <a class="item" href="/twotree/home"> <!-- [routerLink]="['/home']" > -->
-     <i class="home big icon green" *ngIf="(isConnected | async)" ></i>
-     <i class="home big icon red" *ngIf="!(isConnected | async)" ></i>
+     <i class="home big icon green" *ngIf="(isConnected )" ></i>
+     <i class="home big icon red" *ngIf="!(isConnected)" ></i>
    </a>
    <a class="item" (click)="invertedSidebarRight.toggle()">
      <i class="help circle big icon"></i>

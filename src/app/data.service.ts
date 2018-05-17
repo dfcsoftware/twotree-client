@@ -1,3 +1,5 @@
+
+import {throwError as observableThrowError, Observable} from 'rxjs';
 import { environment // API_URL for dev and prod
 } from 'environments/environment';
 
@@ -6,15 +8,13 @@ import { Injectable
 
 import { HttpClient, HttpHeaders, HttpErrorResponse
 } from '@angular/common/http';
-
-import {Observable} from 'rxjs/Observable';
 import { catchError, tap
 } from 'rxjs/operators';
-import 'rxjs/add/operator/retry';
+
 //import 'rxjs/add/operator/catch';
 
-import { AsyncLocalStorage, JSONSchema
-} from 'angular-async-local-storage';
+import { LocalStorage, JSONSchema
+} from '@ngx-pwa/local-storage';
 
 import { BusinessArea, IBusinessArea, Funktion, IFunktion
 } from './menu/menu.model';
@@ -129,7 +129,7 @@ export class DataService {
   public funktion : Funktion;
 
   constructor(private http: HttpClient,
-              protected localStorage: AsyncLocalStorage){
+              protected localStorage: LocalStorage){
      this.uuid = new UUID();
      this.businessArea = new BusinessArea(null);
      this.funktion = new Funktion(null);
@@ -152,7 +152,7 @@ export class DataService {
                 console.log(`DATA: status: ${err.status}, ${err.statusText}`);
                 errMsg = errMsg + `status: ${err.status}, ${err.statusText}`;
             }
-            return Observable.throw(errMsg);
+            return observableThrowError(errMsg);
         }
     } // handleHttpError
 
@@ -202,18 +202,20 @@ export class DataService {
       console.warn('DATA: DB status:',result.status);
       rslt = Return.http_500;
       rslt.status = result.status; // override 500 with actual code
-      if ( this.isString(result.error) ) {
+      if ( t(result, 'result.error').isString ) {
             rslt.error = result.error;
             console.warn("DATA-1:",result.error);
-      } else if ( this.isString(result.error.message) ) { // return.http_internal
+      } else if ( t(result, 'result.error.message').isString ) { // return.http_internal
             rslt.error = result.error.message;
             console.warn("DATA-2:",result.error.message);
-      } else if ( this.isString(result.message) ) { // return.http_internal
+      } else if ( t(result, 'result.message').isString ) { // return.http_internal
             rslt.error = result.message;
             console.warn("DATA-3:",result.message);
       } else {
-            rslt.error = "Unknown error";
-            console.warn("DATA-4: Unknown");
+            rslt = Return.http_200;
+            rslt.payload = result.payload;
+            console.log("DATA-4:",rslt.payload);
+            return rslt;
       }
       return rslt;
     }
@@ -376,7 +378,6 @@ export class DataService {
     return this.http.get<Response>(
         API_URL + "/get_authorization?action=business_area&id=GUEST",
         httpOptions)
-        .retry(3)
         .pipe(
                 tap(data => console.log('DATA: server data:', data)),
                 catchError(this.handleHttpError('getMenuBusinessArea','business_area'))
@@ -417,7 +418,6 @@ export class DataService {
     return this.http.get<Response>(
         API_URL + "/get_authorization?action=function&id=GUEST",
         httpOptions)
-        .retry(3)
         .pipe(
                 tap(data => console.log('DATA: server data:', data)),
                 catchError(this.handleHttpError('getMenuFunktion','function'))
@@ -464,7 +464,6 @@ export class DataService {
     return this.http.get<Response>(
         API_URL + "/get_child_pages?parent_id="+parent_id,
         httpOptions)
-        .retry(3)
         .pipe(
                 tap(data => console.log('DATA: server data:', data)),
                 catchError(this.handleHttpError('getPage',parent_id))
@@ -505,5 +504,148 @@ export class DataService {
          }),
          httpOptions);
   } // move_pageItem
+
+  //https://www.doncohoon.com/db/get_object?ba_id=HOME&f_id=NOTES
+  getObject (parent_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    console.log("DATA: getting page data.");
+    return this.http.get<Response>(
+        API_URL + "/get_object?parent_id="+parent_id,
+        httpOptions)
+        .pipe(
+                tap(data => console.log('DATA: server data:', data)),
+                catchError(this.handleHttpError('getObject',parent_id))
+            );
+    } // getObject
+
+  getObject2 (business_area_id:string, function_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    console.log("DATA: getting page data.");
+    return this.http.get<Response>(
+        API_URL + "/get_object?ba_id="+business_area_id+"&f_id="+function_id,
+        httpOptions)
+        .pipe(
+                tap(data => console.log('DATA: server data:', data)),
+                catchError(this.handleHttpError('getObject',business_area_id))
+            );
+    } // getObject
+
+  putPage(pagename:string, page_type:string, priv:boolean,
+          parent_id:string, business_area_id:string, function_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    var p_id = (priv ? "PRIVATE" : "VIEW");
+    var now = Date.now();
+    var pagid = pagename.replace(/[^A-Z0-9]+/ig, "_").toUpperCase()+'_'+now+'_PAGE';
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_seq_item',
+          params:{'typ'      : 'CMS',
+		              'attr'     : 'PAGE',
+		              'id'       : pagid,     // id
+					        'display'  : pagename,  // display
+					        'parent_id': parent_id, // parent_id (of id)
+					        'ba_id'    : business_area_id,
+				          'f_id'     : function_id,
+				          'p_id'     : p_id, // PRIVATE or VIEW
+					        'o_id'     : page_type } // from getObject()
+         }),
+         httpOptions);
+  } // putPage
+
+  putPageText(pageid:string, pagetitle:string, priv:boolean, o_id:string,
+              business_area_id:string, function_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    var p_id = (priv ? "PRIVATE" : "VIEW");
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_item',
+          params:{'typ'      : 'CMS',
+		              'attr'     : 'PAGE',
+		              'id'       : pageid,     // id
+		              'title'    : pagetitle,  // display
+					        'display'  : pagetitle,  // display
+					        'ba_id'    : business_area_id,
+				          'f_id'     : function_id,
+				          'p_id'     : p_id, // PRIVATE or VIEW
+					        'o_id'     : o_id }
+         }),
+         httpOptions);
+  } // putPage
+
+  putPageUP(page_id:string,
+            parent_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_item_up',
+          params:{'attr'     : 'PAGE',
+		              'child_id' : page_id,   // id
+					        'parent_id': parent_id} // parent_id (of id) }
+         }),
+         httpOptions);
+  } // putPageUP
+
+  putPageDOWN(page_id:string,
+              parent_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_item_down',
+          params:{'attr'     : 'PAGE',
+		              'child_id' : page_id,   // id
+					        'parent_id': parent_id} // parent_id (of id) }
+         }),
+         httpOptions);
+  } // putPageDOWN
 
 }

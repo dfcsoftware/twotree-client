@@ -6,7 +6,7 @@
     <h3 class="truncate">{{pageDataService.pageTitle}}</h3>
   </a>
   <div class="right menu">
-    <a class="item" (click)="editMode()" *ngIf="authService.isLoggedIn()">
+    <a class="item" (click)="editMode()" *ngIf="authService.isLoggedIn() && pageDataService.pageAuth > pageDataService.auth_view">
       <i class="icon edit big"></i>.
     </a>
   </div>
@@ -20,14 +20,28 @@
     </div>
   <div class="ui bottom attached segment" suiTabContent="1">
 
-    <ul class='ui menu' [dragula]='"item-bag"' [dragulaModel]='pageDataService.page_items'>
+    <ul class='ui menu' >
+      <li class="ui menu item"
+         *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
+			    <a [routerLink]="['/pageAdd/'+this.pageDataService.pageID]"
+             [queryParams]="{ p: this.pageDataService.pageTitle }"
+              queryParamsHandling="merge">
+			    <!-- href="/pageAdd/{{this.pageDataService.pageID}}?p={{this.pageDataService.pageTitle}}"> -->
+				  <h4><i class="icon plus square big" style="color:green"></i></h4>
+				</a>
+      </li>
       <li *ngFor="let pi of pageDataService.page_items; let idx = index;">
        <div class="ui item" id="{{idx}}">
            <div class="four large ui buttons" id="{{pi.id}}">
-            <button class="ui basic button" *ngIf="ifEdit"><i class="icon trash alternate big"></i></button>
-            <button class="ui basic button largetext" (click)="showPage(pi.id)">{{pi.nm}}</button>
-            <button class="ui basic button" *ngIf="ifEdit"><i class="icon edit big"></i></button>
-            <button class="ui basic button" *ngIf="ifEdit"><i class="icon hand rock outline big movehandle"></i></button>
+            <button class="ui basic button" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view"><i class="icon trash alternate big"></i></button>
+            <button class="ui basic button largetext" (click)="pageEdit(pi.id,pi.nm)" *ngIf="ifEdit" >{{pi.nm}}</button>
+            <button class="ui basic button largetext" (click)="showPage(pi.id)"  *ngIf="!ifEdit">{{pi.nm}}</button>
+			<button class="ui basic button" style="background:none; border:none; box-shadow:none;" (click)="pageUp(idx)" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view" >
+			  <i class="icon angle up big"></i>
+			</button>
+			<button class="ui basic button" style="background:none; border:none; box-shadow:none;" (click)="pageDown(idx)" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
+			  <i class="icon angle down big"></i>
+			</button>
            </div>
        </div>
       </li>

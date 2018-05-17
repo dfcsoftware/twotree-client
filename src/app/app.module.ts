@@ -7,11 +7,11 @@ import { NgModule, APP_INITIALIZER
 import { RouterModule, Routes
 } from '@angular/router';
 
+import { TitleCasePipe
+} from '@angular/common';
+
 import {SuiModule
 } from 'ng2-semantic-ui';
-
-import { AsyncLocalStorageModule
-} from 'angular-async-local-storage';
 
 import { AppComponent
 } from './app.component';
@@ -34,6 +34,12 @@ import { PageComponent
 import { DetailComponent
 } from './page/detail/detail.component';
 
+import { PageAddComponent
+} from './page/page-add/page-add.component';
+
+import { PageEditComponent
+} from './page/page-edit/page-edit.component';
+
 import { LoginComponent
 } from './login/login.component';
 
@@ -52,9 +58,6 @@ import {HttpClientModule
 import { DataService
 } from './data.service';
 
-import  {
-  DragulaModule
-} from 'ng2-dragula';
 
 export function init_app(dataService: DataService){
     // Do initing of services that is required before app loads
@@ -76,6 +79,16 @@ export function init_app(dataService: DataService){
      path: 'page/:id',
      component: PageComponent,
      canActivate: [ LoggedInGuard ]
+   },
+   {
+     path: 'pageAdd/:id',
+     component: PageAddComponent,
+     canActivate: [ LoggedInGuard ]
+   },
+   {
+     path: 'pageEdit/:id',
+     component: PageEditComponent,
+     canActivate: [ LoggedInGuard ]
    }
   ];
 
@@ -88,16 +101,16 @@ export function init_app(dataService: DataService){
     FunkComponent,
     PageComponent,
     DetailComponent,
-    LoginComponent
+    LoginComponent,
+    PageAddComponent,
+    PageEditComponent
   ],
   imports: [
     BrowserModule,
     SuiModule,
-    AsyncLocalStorageModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    DragulaModule,
     RouterModule.forRoot(
       routes  // as childRoutes,
       //,{ enableTracing: true } // <-- debugging purposes only
@@ -105,6 +118,7 @@ export function init_app(dataService: DataService){
     //RouterModule.forRoot(routes, { useHash: true })
   ],
   providers: [
+    TitleCasePipe,
     AUTH_PROVIDERS,
     LoggedInGuard,
     DataService,

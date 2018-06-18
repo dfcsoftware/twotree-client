@@ -135,14 +135,6 @@ export class DataService {
      this.funktion = new Funktion(null);
   } // constructor
 
-   isString(x) {
-     if (x) {
-      return Object.prototype.toString.call(x) === "[object String]";
-     } else {
-      return false;
-     }
-   } // isString
-
    private handleHttpError(operation: String, url: String) {
         return (err: any) => {
             let errMsg = `DATA: error in ${operation}() retrieving ${url} `;
@@ -647,5 +639,83 @@ export class DataService {
          }),
          httpOptions);
   } // putPageDOWN
+
+  putArticle(articlename:string, article_type:string, priv:boolean,
+             parent_id:string, business_area_id:string, function_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    var p_id = (priv ? "PRIVATE" : "VIEW");
+    var now = Date.now();
+    var artid = articlename.replace(/[^A-Z0-9]+/ig, "_").toUpperCase()+'_'+now+'_ARTICLE';
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_seq_item',
+          params:{'typ'      : 'CMS',
+		              'attr'     : 'ARTICLE',
+		              'id'       : artid,     // id
+					        'display'  : articlename,  // display
+					        'parent_id': parent_id, // parent_id (of id)
+					        'ba_id'    : business_area_id,
+				          'f_id'     : function_id,
+				          'p_id'     : p_id, // PRIVATE or VIEW
+					        'o_id'     : article_type } // from getObject()
+         }),
+         httpOptions);
+  } // putArticle
+
+  putArticleUP(page_id:string,
+            parent_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_item_up',
+          params:{'attr'     : 'ARTICLE',
+		              'child_id' : page_id,   // id
+					        'parent_id': parent_id} // parent_id (of id) }
+         }),
+         httpOptions);
+  } // putArticleUP
+
+  putArticleDOWN(page_id:string,
+              parent_id:string) {
+    var authToken = this.uuid.get();
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type'  : 'application/json',
+          'Accept'        : 'application/json',
+          'Authorization' : 'key ' +authToken
+      })
+    };
+    return this.http.post<Response>(
+        API_URL,
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id:authToken,
+          method:'put_item_down',
+          params:{'attr'     : 'ARTICLE',
+		              'child_id' : page_id,   // id
+					        'parent_id': parent_id} // parent_id (of id) }
+         }),
+         httpOptions);
+  } // puttArticleDOWN
 
 }

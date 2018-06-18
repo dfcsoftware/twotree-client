@@ -1,0 +1,67 @@
+<div class="ui menu top fixed three inverted "> <!--  item  -->
+  <a class="item" [routerLink]="['/page/',pageURL]" >
+      <i class="icon chevron left big"></i>
+  </a>
+  <a class="item">
+    <h3 class="truncate">Add Detail to {{pageTitle}}</h3>
+  </a>
+  <div class="right menu">
+    <a class="item" (click)="saveArticle()"
+      *ngIf="authService.isLoggedIn()&&
+              pageFormGroup.valid&&
+              pageFormGroup.dirty&&
+              !saved">
+      <i class="icon save big"></i>.
+    </a>
+    <a class="item" (click)="editArticle()"
+      *ngIf="authService.isLoggedIn()&&
+              pageFormGroup.valid&&
+              pageFormGroup.dirty&&
+              saved">
+      <i class="icon edit big"></i>.
+    </a>
+  </div>
+</div>
+<div class="ui segment">
+    <form class="ui form" [formGroup]="pageFormGroup">
+      <div class="required field">
+        <label for="detailTitle">New Detail Title:</label>
+        <input type="text" placeholder="New Detail Name" maxlength="60" autofocus required
+         formControlName="title"
+         id="detailTitle"
+         class="form-control"
+         [(ngModel)]="itemName">
+      </div>
+      <sui-message class="warning" *ngIf="pageFormGroup.invalid &&
+                                          pageFormGroup.dirty" >
+        <div class="header">
+         New Detail Title requires at least 4 characters
+        </div>
+        <!-- <p>dismiss with the close icon in the top right</p> -->
+      </sui-message>
+
+      <div class="field">
+         <label for="privItem">Private:</label>
+         <sui-checkbox class="ui toggle"
+             formControlName="priv"
+             id="privItem"
+             [(ngModel)]="privateItem">
+              {{ privateItem }}
+         </sui-checkbox>
+      </div>
+    </form>
+
+     <p>Form value: {{ pageFormGroup.value | json }} {{itemName}}</p>
+     <p>Form Status: {{ pageFormGroup.status }} </p>
+
+    <sui-message class="success" >
+        <div class="header">
+         {{itemName}} {{message}}
+        </div>
+        <!-- <p>dismiss with the close icon in the top right</p> -->
+     </sui-message>
+
+</div>
+<p>
+  article-add works!
+</p>

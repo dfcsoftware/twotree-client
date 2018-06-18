@@ -30,7 +30,6 @@ import { AuthService
 })
 export class PageComponent implements OnInit {
   ifEdit      : boolean = false;
-  ifLoggedIn  : boolean = false;
   pageHistory : Array<string>;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -92,6 +91,14 @@ export class PageComponent implements OnInit {
   pageDown(index) {
     this.pageDataService.pageDOWN(index);
   } // pageUP
+
+  articleUp(index) {
+    this.pageDataService.articleUP(index);
+  } // articleUP
+
+  articleDown(index) {
+    this.pageDataService.articleDOWN(index);
+  } // articleUP
 
   pageEdit(pageID: string, pageName: string) {
     console.log("PAGE: redirect /pageEdit/",pageID);

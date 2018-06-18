@@ -6,9 +6,8 @@ Save ideas and knowledge for your own use, or to share. Supports a Wiky markup, 
 
 ## Dependencies
 
-* Angular2 v5.2 (https://github.com/angular/angular)
-* angular-async-local-storage (https://github.com/cyrilletuzi/angular-async-local-storage)
-* ng2-dragula (https://github.com/valor-software/ng2-dragula)
+* Angular2 v6.0 (https://github.com/angular/angular)
+* ngx-pwa/local-storage v6.0 (https://github.com/cyrilletuzi/angular-async-local-storage)
 * ng2-semantic-ui (https://github.com/edcarroll/ng2-semantic-ui)
 * sw-toolbox (https://github.com/GoogleChromeLabs/sw-toolbox/)
 * typy (https://github.com/flexdinesh/typy)

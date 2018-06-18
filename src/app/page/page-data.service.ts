@@ -290,9 +290,8 @@ export class PageDataService {
              if (this.rslt.status == Return.http_good ) {
                console.log("PAGE-DATA: putPage ok",this.rslt);
                callback(null, this.rslt.payload);
-             } else { // Already tried local database
+             } else {
                console.error("PAGE-DATA: http putPage rslt no good", this.rslt.error);
-               //this.getLocalPage(parent_id);
              }
          },
          response => {
@@ -300,7 +299,6 @@ export class PageDataService {
              this.rslt = this.dataService.check_error(response);
              console.error('PAGE-DATA: ERROR putPage-> status:',this.rslt.status);
              console.error('PAGE-DATA: ERROR putPage-> message:',this.rslt.error);
-             //this.getLocalPage(parent_id); // already tried it
          },
          () => {
              //console.log("The POST observable is now completed.");
@@ -309,7 +307,7 @@ export class PageDataService {
     } // putPage
 
     putPageText(pagename:string,  page_type:string,        priv:boolean,
-                pageid:string, business_area_id:string, function_id:string,
+                pageid:string,    business_area_id:string, function_id:string,
                 callback:ICallback)  {
       this.dataService.putPageText(pageid, pagename, priv, page_type,
                                    business_area_id, function_id)
@@ -321,9 +319,8 @@ export class PageDataService {
              if (this.rslt.status == Return.http_good ) {
                console.log("PAGE-DATA: putPageText ok",this.rslt);
                callback(null, this.rslt.payload);
-             } else { // Already tried local database
+             } else {
                console.error("PAGE-DATA: http putPageText rslt no good", this.rslt.error);
-               //this.getLocalPage(parent_id);
              }
          },
          response => {
@@ -331,7 +328,6 @@ export class PageDataService {
              this.rslt = this.dataService.check_error(response);
              console.error('PAGE-DATA: ERROR putPageText-> status:',this.rslt.status);
              console.error('PAGE-DATA: ERROR putPageText-> message:',this.rslt.error);
-             //this.getLocalPage(parent_id); // already tried it
          },
          () => {
              //console.log("The POST observable is now completed.");
@@ -343,24 +339,24 @@ export class PageDataService {
     if (index <= 0 || index >= this.page_items.length)
             return;
     var temp = this.page_items[index];
-    console.log("PAGE-DATA moveUP:",this.page_items[index].id,this.pageID);
+    console.log("PAGE-DATA pageUP:",this.page_items[index].id,this.pageID);
 		this.dataService.putPageUP(this.page_items[index].id,this.pageID) // DB
         .subscribe(
          (val) => {
-             console.log("PAGE-DATA: moveUP call successful value returned in body",
+             console.log("PAGE-DATA: pageUP call successful value returned in body",
                          val);
              this.rslt = this.dataService.check_results(val);
              if (this.rslt.status == Return.http_good ) {
-               console.log("PAGE-DATA: moveUP ok",this.rslt);
+               console.log("PAGE-DATA: pageUP ok",this.rslt);
              } else {
-               console.error("PAGE-DATA: http putPage rslt no good", this.rslt.error);
+               console.error("PAGE-DATA: http pageUP rslt no good", this.rslt.error);
              }
          },
          response => {
-             console.error("PAGE-DATA: moveUP call in error", response);
+             console.error("PAGE-DATA: pageUP call in error", response);
              this.rslt = this.dataService.check_error(response);
-             console.error('PAGE-DATA: ERROR moveUP-> status:',this.rslt.status);
-             console.error('PAGE-DATA: ERROR moveUP-> message:',this.rslt.error);
+             console.error('PAGE-DATA: ERROR pageUP-> status:',this.rslt.status);
+             console.error('PAGE-DATA: ERROR pageUP-> message:',this.rslt.error);
          },
          () => {
              //console.log("The POST observable is now completed.");
@@ -374,24 +370,24 @@ export class PageDataService {
     if (index < 0 || index >= (this.page_items.length - 1))
 			return;
     var temp = this.page_items[index];
-    console.log("PAGE-DATA moveDOWN:",this.page_items[index].id,this.pageID);
+    console.log("PAGE-DATA pageDOWN:",this.page_items[index].id,this.pageID);
 		this.dataService.putPageDOWN(this.page_items[index].id,this.pageID) // DB
         .subscribe(
          (val) => {
-             console.log("PAGE-DATA: moveDOWN call successful value returned in body",
+             console.log("PAGE-DATA: pageDOWN call successful value returned in body",
                          val);
              this.rslt = this.dataService.check_results(val);
              if (this.rslt.status == Return.http_good ) {
-               console.log("PAGE-DATA: moveDOWN ok",this.rslt);
+               console.log("PAGE-DATA: pageDOWN ok",this.rslt);
              } else {
-               console.error("PAGE-DATA: http putPage rslt no good", this.rslt.error);
+               console.error("PAGE-DATA: http pageDOWN rslt no good", this.rslt.error);
              }
          },
          response => {
-             console.error("PAGE-DATA: moveDOWN call in error", response);
+             console.error("PAGE-DATA: pageDOWN call in error", response);
              this.rslt = this.dataService.check_error(response);
-             console.error('PAGE-DATA: ERROR moveDOWN-> status:',this.rslt.status);
-             console.error('PAGE-DATA: ERROR moveDOWN-> message:',this.rslt.error);
+             console.error('PAGE-DATA: ERROR pageDOWN-> status:',this.rslt.status);
+             console.error('PAGE-DATA: ERROR pageDOWN-> message:',this.rslt.error);
          },
          () => {
              //console.log("The POST observable is now completed.");
@@ -400,5 +396,103 @@ export class PageDataService {
     this.page_items[index] = this.page_items[index + 1];
     this.page_items[index + 1] = temp;
   } // pageDOWN
+
+  putArticle(articlename:string, article_type:string,     priv:boolean,
+             parent_id:string,   business_area_id:string, function_id:string,
+             callback:ICallback)  {
+      this.dataService.putArticle(articlename, article_type,     priv,
+                                  parent_id,   business_area_id, function_id)
+        .subscribe(
+         (val) => {
+             console.log("PAGE-DATA: putArticle call successful value returned in body",
+                         val);
+             this.rslt = this.dataService.check_results(val);
+             if (this.rslt.status == Return.http_good ) {
+               console.log("PAGE-DATA: putArticle ok",this.rslt);
+               callback(null, this.rslt.payload);
+             } else {
+               console.error("PAGE-DATA: http putPage rslt no good", this.rslt.error);
+             }
+         },
+         response => {
+             console.error("PAGE-DATA: putArticle call in error", response);
+             this.rslt = this.dataService.check_error(response);
+             console.error('PAGE-DATA: ERROR putArticle-> status:',this.rslt.status);
+             console.error('PAGE-DATA: ERROR putArticle-> message:',this.rslt.error);
+         },
+         () => {
+             //console.log("The POST observable is now completed.");
+        }
+      );
+  } // putArticle
+
+  articleUP(index) {
+    if (index <= 0 || index >= this.page_details.length)
+            return;
+    var temp = this.page_details[index];
+    var temp2 = this.page_html[index];
+    console.log("PAGE-DATA articleUP:",this.page_details[index].id,this.pageID);
+		this.dataService.putArticleUP(this.page_details[index].id,this.pageID) // DB
+        .subscribe(
+         (val) => {
+             console.log("PAGE-DATA: articleUP call successful value returned in body",
+                         val);
+             this.rslt = this.dataService.check_results(val);
+             if (this.rslt.status == Return.http_good ) {
+               console.log("PAGE-DATA: articleUP ok",this.rslt);
+             } else {
+               console.error("PAGE-DATA: http articleUP rslt no good", this.rslt.error);
+             }
+         },
+         response => {
+             console.error("PAGE-DATA: articleUP call in error", response);
+             this.rslt = this.dataService.check_error(response);
+             console.error('PAGE-DATA: ERROR articleUP-> status:',this.rslt.status);
+             console.error('PAGE-DATA: ERROR articleUP-> message:',this.rslt.error);
+         },
+         () => {
+             //console.log("The POST observable is now completed.");
+        }
+      );
+    this.page_details[index] = this.page_details[index - 1];
+    this.page_details[index - 1] = temp;
+    this.page_html[index] = this.page_html[index - 1];
+    this.page_html[index - 1] = temp2;
+  } // articleUP
+
+  articleDOWN(index) {
+  console.log("PAGE-DATA articleDOWN page_details:",this.page_details);
+    if (index < 0 || index >= (this.page_details.length - 1))
+			return;
+    var temp = this.page_details[index];
+    var temp2 = this.page_html[index];
+    console.log("PAGE-DATA articleDOWN:",this.page_details[index].id,this.pageID);
+		this.dataService.putArticleDOWN(this.page_details[index].id,this.pageID) // DB
+        .subscribe(
+         (val) => {
+             console.log("PAGE-DATA: articleDOWN call successful value returned in body",
+                         val);
+             this.rslt = this.dataService.check_results(val);
+             if (this.rslt.status == Return.http_good ) {
+               console.log("PAGE-DATA: articleDOWN ok",this.rslt);
+             } else {
+               console.error("PAGE-DATA: http articleDOWN rslt no good", this.rslt.error);
+             }
+         },
+         response => {
+             console.error("PAGE-DATA: articleDOWN call in error", response);
+             this.rslt = this.dataService.check_error(response);
+             console.error('PAGE-DATA: ERROR articleDOWN-> status:',this.rslt.status);
+             console.error('PAGE-DATA: ERROR articleDOWN-> message:',this.rslt.error);
+         },
+         () => {
+             //console.log("The POST observable is now completed.");
+        }
+      );
+    this.page_details[index] = this.page_details[index + 1];
+    this.page_details[index + 1] = temp;
+    this.page_html[index] = this.page_html[index + 1];
+    this.page_html[index + 1] = temp2;
+  } // articleDOWN
 
 }

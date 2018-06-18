@@ -1,4 +1,5 @@
-<div class="ui menu top fixed three inverted "> <!--  item  -->
+<!-- T O P   M E N U -->
+<div class="ui menu top fixed three inverted ">
   <a class="item" (click)="goBack()" >
       <i class="icon chevron left big"></i>
   </a>
@@ -11,15 +12,19 @@
     </a>
   </div>
 </div>
+
 <div class="ui segment">
  <sui-tabset>
-    <div class="ui top attached tabular menu">
-        <a class="item" suiTabHeader="1">Items</a>
-        <a class="item" suiTabHeader="2" [isActive]="pageDataService.activeDetail">Details</a>
-        <a class="item" suiTabHeader="3" *ngIf="ifEdit">Recycle</a>
-    </div>
-  <div class="ui bottom attached segment" suiTabContent="1">
 
+  <!-- T A B S -->
+  <div class="ui top attached tabular menu">
+    <a class="item" suiTabHeader="1">Items</a>
+    <a class="item" suiTabHeader="2" [isActive]="pageDataService.activeDetail">Details</a>
+    <a class="item" suiTabHeader="3" *ngIf="ifEdit">Recycle</a>
+  </div>
+
+  <!-- I T E M S -->
+  <div class="ui bottom attached segment" suiTabContent="1">
     <ul class='ui menu' >
       <li class="ui menu item"
          *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
@@ -31,26 +36,71 @@
 				</a>
       </li>
       <li *ngFor="let pi of pageDataService.page_items; let idx = index;">
-       <div class="ui item" id="{{idx}}">
-           <div class="four large ui buttons" id="{{pi.id}}">
-            <button class="ui basic button" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view"><i class="icon trash alternate big"></i></button>
-            <button class="ui basic button largetext" (click)="pageEdit(pi.id,pi.nm)" *ngIf="ifEdit" >{{pi.nm}}</button>
-            <button class="ui basic button largetext" (click)="showPage(pi.id)"  *ngIf="!ifEdit">{{pi.nm}}</button>
-			<button class="ui basic button" style="background:none; border:none; box-shadow:none;" (click)="pageUp(idx)" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view" >
-			  <i class="icon angle up big"></i>
-			</button>
-			<button class="ui basic button" style="background:none; border:none; box-shadow:none;" (click)="pageDown(idx)" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
-			  <i class="icon angle down big"></i>
-			</button>
-           </div>
-       </div>
+        <div class="ui item" id="{{idx}}">
+          <div class="four large ui buttons" id="{{pi.id}}">
+            <button class="ui basic button" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
+              <i class="icon trash alternate big"></i>
+            </button>
+            <button class="ui basic button largetext" (click)="pageEdit(pi.id,pi.nm)"
+              *ngIf="ifEdit" >{{pi.nm}}</button>
+            <button class="ui basic button largetext" (click)="showPage(pi.id)"
+              *ngIf="!ifEdit">{{pi.nm}}</button>
+			      <button class="ui basic button" style="background:none; border:none; box-shadow:none;"
+			        (click)="pageUp(idx)" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view" >
+			        <i class="icon angle up big"></i>
+			      </button>
+			      <button class="ui basic button" style="background:none; border:none; box-shadow:none;"
+			        (click)="pageDown(idx)" *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
+			        <i class="icon angle down big"></i>
+			      </button>
+          </div>
+        </div>
       </li>
     </ul>
 
+  <!-- D E T A I L S -->
   </div>
   <div class="ui bottom attached segment" suiTabContent="2" >
-     <app-detail [page_html]="pageDataService.page_html" [pageTitle]="pageDataService.pageTitle" ></app-detail>
+    <ul class='ui menu' >
+      <li class="ui menu item"
+         *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
+			    <a [routerLink]="['/articleAdd/'+this.pageDataService.pageID]"
+             [queryParams]="{ p: this.pageDataService.pageTitle }"
+              queryParamsHandling="merge">
+			    <!-- href="/pageAdd/{{this.pageDataService.pageID}}?p={{this.pageDataService.pageTitle}}"> -->
+				  <h4><i class="icon plus square big" style="color:green"></i></h4>
+				</a>
+      </li>
+      <li>
+        <div *ngFor="let d of pageDataService.page_html; let idx = index;"> <!-- _detail"> -->
+          <div class="ui item" id="{{idx}}"  *ngIf="ifEdit && pageDataService.pageAuth > pageDataService.auth_view">
+            <div class="four large ui buttons" >
+              <button class="ui basic button">
+                <i class="icon trash alternate big"></i>
+              </button>
+              <button class="ui basic button largetext"
+                (click)="articleEdit(d.id,d.title)">
+                {{d.title}}
+              </button>
+              <button class="ui basic button" style="background:none; border:none; box-shadow:none;"
+                (click)="articleUp(idx)">
+                <i class="icon angle up big"></i>
+              </button>
+              <button class="ui basic button" style="background:none; border:none; box-shadow:none;"
+                (click)="articleDown(idx)">
+                <i class="icon angle down big"></i>
+              </button>
+            </div>
+          </div>
+          <div class="ui item"><h3>{{d.title}}</h3></div>
+          <div class="ui wiki detail" [innerHTML]="d.text | safeHtml"></div>
+          <hr>
+        </div>
+      </li>
+    </ul>
   </div>
+
+  <!-- R E C Y C L E  -->
   <div class="ui bottom attached segment" suiTabContent="3" *ngIf="ifEdit">
      Hiding in plain sight...edit mode is on!!
       <div class='ui menu' > <!-- [dragula]='"item-bag"'  -->

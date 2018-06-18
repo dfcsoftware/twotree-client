@@ -31,9 +31,6 @@ import { FunkComponent
 import { PageComponent
 } from './page/page.component';
 
-import { DetailComponent
-} from './page/detail/detail.component';
-
 import { PageAddComponent
 } from './page/page-add/page-add.component';
 
@@ -57,6 +54,9 @@ import {HttpClientModule
 
 import { DataService
 } from './data.service';
+
+import { ArticleAddComponent
+} from './page/article-add/article-add.component';
 
 
 export function init_app(dataService: DataService){
@@ -89,6 +89,11 @@ export function init_app(dataService: DataService){
      path: 'pageEdit/:id',
      component: PageEditComponent,
      canActivate: [ LoggedInGuard ]
+   },
+   {
+     path: 'articleAdd/:id',
+     component: ArticleAddComponent,
+     canActivate: [ LoggedInGuard ]
    }
   ];
 
@@ -100,10 +105,10 @@ export function init_app(dataService: DataService){
     SafeHtmlPipe,
     FunkComponent,
     PageComponent,
-    DetailComponent,
     LoginComponent,
     PageAddComponent,
-    PageEditComponent
+    PageEditComponent,
+    ArticleAddComponent
   ],
   imports: [
     BrowserModule,
